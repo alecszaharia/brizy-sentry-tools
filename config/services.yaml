@@ -1,0 +1,14 @@
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: true
+
+  Brizy\SentryToolsBundle\Http\TracedClient:
+    decorates: Symfony\Contracts\HttpClient\HttpClientInterface
+
+  Brizy\SentryToolsBundle\EventListener\MessengerSubscriber:
+    public: true
+    tags:
+      - { name: 'kernel.event_subscriber' }
