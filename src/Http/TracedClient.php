@@ -22,7 +22,7 @@ final class TracedClient implements HttpClientInterface
         $this->hub             = $hub;
     }
 
-    public function withOptions(array $options): static {
+    public function withOptions(array $options) {
         $clone = clone  $this->decoratedClient;
         return $clone->withOptions($options);
     }
