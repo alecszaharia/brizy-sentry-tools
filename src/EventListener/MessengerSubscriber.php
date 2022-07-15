@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brizy\SentryToolsBundle\EventListener;
 
 use Psr\Log\LoggerInterface;
+use Sentry\Breadcrumb;
 use Sentry\State\HubInterface;
 use Sentry\Tracing\SpanContext;
 use Sentry\Tracing\TransactionContext;
@@ -43,6 +44,19 @@ class MessengerSubscriber implements EventSubscriberInterface
     public function onWorkerMessageHandledEvent(WorkerMessageHandledEvent $eventArgs)
     {
         $span = $this->hub->getSpan();
+
+        $this->hub->addBreadcrumb(
+            new Breadcrumb(
+                Breadcrumb::LEVEL_INFO,
+                Breadcrumb::TYPE_DEFAULT,
+                'php',
+                null,
+                [
+                    'memory_get_peak_usage'=>memory_get_peak_usage(true),
+                    'memory_get_usage'=>memory_get_usage(true)
+                ]
+            )
+        );
 
         if (null !== $span) {
             $span->finish();

@@ -113,6 +113,19 @@ final class TracedClient implements HttpClientInterface
                 )
             );
 
+            $this->hub->addBreadcrumb(
+                new Breadcrumb(
+                    Breadcrumb::LEVEL_INFO,
+                    Breadcrumb::TYPE_DEFAULT,
+                    'php',
+                    null,
+                    [
+                        'memory_get_peak_usage'=>memory_get_peak_usage(true),
+                        'memory_get_usage'=>memory_get_usage(true)
+                    ]
+                )
+            );
+
             return $response;
         } finally {
             if (null !== $span) {
